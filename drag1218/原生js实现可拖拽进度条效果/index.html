@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>原生js实现可拖拽进度条效果</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-size: 12px;
+		}
+
+		.lanren {
+			width: 300px;
+			margin: 100px auto;
+		}
+
+		.scale_panel {
+			color: #999;
+			width: 200px;
+			position: absolute;
+			line-height: 18px;
+			left: 60px;
+			top: -0px;
+		}
+
+		.scale_panel .r {
+			float: right;
+		}
+
+		.scale span {
+			width: 16px;
+			height: 16px;
+			position: absolute;
+			left: -2px;
+			top: -5px;
+			cursor: pointer;
+			background-color: #fff;
+			box-shadow: 0px 0px 8px 5px #c3f5e7;
+			border-radius: 8px;
+		}
+
+		.scale {
+			background-repeat: repeat-x;
+			background-position: 0 100%;
+			background-color: #E4E4E4;
+			border-left: 1px #83BBD9 solid;
+			width: 200px;
+			height: 3px;
+			position: relative;
+			font-size: 0px;
+			border-radius: 3px;
+		}
+
+		.scale div {
+			background-repeat: repeat-x;
+			background-color: #3BE3FF;
+			width: 0px;
+			position: absolute;
+			height: 3px;
+			width: 0;
+			left: 0;
+			bottom: 0;
+		}
+
+		.lanrenLi {
+			width: 64px;
+			height: 33px;
+			background-color: #24afff;
+			position: relative;
+			border-radius: 16px;
+			margin-top: 30px;
+			margin-left: 50px;
+		}
+
+		.lanrenLi #title {
+			color: #fff;
+			font-size: 18px;
+			font-family: Arial;
+			display: inline-block;
+			width: 64px;
+			height: 33px;
+			text-align: center;
+			line-height: 33px;
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- 代码部分begin -->
+	<div class="lanren">
+		<div class="lanrenLi"><span id="title"></span>
+			<div class="scale_panel">
+				<span class="r"></span>
+				<div class="scale"
+				 id="bar">
+					<div></div>
+					<span id="btn"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		var scale = function (btn, bar, title) {
+			this.btn = document.getElementById(btn);
+			this.bar = document.getElementById(bar);
+			this.title = document.getElementById(title);
+			this.step = this.bar.getElementsByTagName("div")[0];
+			this.init();
+		};
+		scale.prototype = {
+			init: function () {
+				var f = this, g = document, b = window, m = Math;
+				f.btn.onmousedown = function (e) {
+					var x = (e || b.event).clientX;
+					var l = this.offsetLeft;
+					var max = f.bar.offsetWidth - this.offsetWidth;
+					g.onmousemove = function (e) {
+						var thisX = (e || b.event).clientX;
+						var to = m.min(max, m.max(-2, l + (thisX - x)));
+						f.btn.style.left = to + 'px';
+						f.ondrag(m.round(m.max(0, to / max) * 100), to);
+						b.getSelection ? b.getSelection().removeAllRanges() : g.selection.empty();
+					};
+					g.onmouseup = new Function('this.onmousemove=null');
+				};
+			},
+			ondrag: function (pos, x) {
+				this.step.style.width = Math.max(0, x) + 'px';
+				this.title.innerHTML = pos + '%';
+			}
+		}
+		new scale('btn', 'bar', 'title');
+	</script>
+	<!-- 代码部分end -->
+
+
+
+
+
+                <!-- 代码部分begin -->
+                <div class="lanren">
+                    <div class="lanrenLi"><span id="title"></span>
+                        <div class="scale_panel">
+                            <span class="r"></span>
+                            <div class="scale"
+                                id="bar">
+                                <div></div>
+                                <span id="btn"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+            var scale = function (btn, bar, title) {
+                this.btn = document.getElementById(btn);
+                this.bar = document.getElementById(bar);
+                this.title = document.getElementById(title);
+                this.step = this.bar.getElementsByTagName("div")[0];
+                this.init();
+            };
+            scale.prototype = {
+                init: function () {
+                    var f = this, g = document, b = window, m = Math;
+                    f.btn.onmousedown = function (e) {
+                        var x = (e || b.event).clientX;
+                        var l = this.offsetLeft;
+                        var max = f.bar.offsetWidth - this.offsetWidth;
+                        g.onmousemove = function (e) {
+                            var thisX = (e || b.event).clientX;
+                            var to = m.min(max, m.max(-2, l + (thisX - x)));
+                            f.btn.style.left = to + 'px';
+                            f.ondrag(m.round(m.max(0, to / max) * 100), to);
+                            b.getSelection ? b.getSelection().removeAllRanges() : g.selection.empty();
+                        };
+                        g.onmouseup = new Function('this.onmousemove=null');
+                    };
+                },
+                ondrag: function (pos, x) {
+                    this.step.style.width = Math.max(0, x) + 'px';
+                    this.title.innerHTML = parseInt((pos / 100) * vThis.studentBox.length);
+                    $('#title').css('left',  Math.max(0, x) + 'px');
+                }
+            }
+            new scale('btn', 'bar', 'title');
+
+
+
+
+
+.lanren {
+		position: relative;
+    width: 240px;
+    margin-top:70px;
+    margin-left:20px;
+		}
+
+		.scale_panel {
+			color: #999;
+			width: 240px;
+			position: absolute;
+			line-height: 18px;
+			left: 20px;
+			top: 50px;
+		}
+
+		.scale_panel .r {
+			float: right;
+		}
+
+		.scale span {
+			width: 16px;
+			height: 16px;
+			position: absolute;
+			left: 1px;
+			top: -5px;
+			cursor: pointer;
+			background-color: #fff;
+			box-shadow: 0px 0px 8px 5px #c3f5e7;
+			border-radius: 8px;
+		}
+
+		.scale {
+			background-repeat: repeat-x;
+			background-position: 0 100%;
+			background-color: #E4E4E4;
+			border-left: 1px #83BBD9 solid;
+			width: 240px;
+			height: 4px;
+			position: relative;
+			font-size: 0px;
+			border-radius: 3px;
+		}
+
+		.scale div {
+			background-repeat: repeat-x;
+			background-color: #3BE3FF;
+			width: 0px;
+			position: absolute;
+			height: 4px;
+			width: 0;
+			left: 0;
+			bottom: 0;
+		}
+
+		.lanrenLi {
+		  width: 64px;
+  height: 33px;
+  background-color: #24afff;
+  position: relative;
+  border-radius: 16px;
+  margin-top:-55px;
+  margin-left: -20px;
+		}
+
+		.lanrenLi #title {
+		 color: #fff;
+  font-size: 18px;
+  font-family: Arial;
+  display: inline-block;
+  width: 64px;
+  height: 33px;
+  text-align: center;
+  line-height: 33px;
+		}
+
+.lanrenLi #title:after {
+  width: 0;
+  height: 0;
+  content: '';
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #24afff;
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  margin-left: -6px;
+}
+
+</body>
+
+</html>

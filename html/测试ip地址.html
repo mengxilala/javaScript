@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <span id="ip"></span>
+
+
+    <script>
+        /**
+ * Get the user IP throught the webkitRTCPeerConnection
+ * @param onNewIP {Function} listener function to expose the IP locally
+ * @return undefined
+ */
+        function getUserIP(onNewIP) { //  onNewIp - your listener function for new IPs
+            //compatibility for firefox and chrome
+            var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+            var pc = new myPeerConnection({
+                iceServers: []
+            }),
+                noop = function () { },
+                localIPs = {},
+                ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
+                key;
+
+            function iterateIP(ip) {
+                if (!localIPs[ip]) onNewIP(ip);
+                localIPs[ip] = true;
+            }
+
+            //create a bogus data channel
+            pc.createDataChannel("");
+
+            // create offer and set local description
+            pc.createOffer(function (sdp) {
+                sdp.sdp.split('\n').forEach(function (line) {
+                    if (line.indexOf('candidate') < 0) return;
+                    line.match(ipRegex).forEach(iterateIP);
+                });
+
+                pc.setLocalDescription(sdp, noop, noop);
+            }, noop);
+
+            //listen for candidate events
+            pc.onicecandidate = function (ice) {
+                if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
+                ice.candidate.candidate.match(ipRegex).forEach(iterateIP);
+            };
+        }
+
+        // Usage
+
+        getUserIP(function (ip) {
+            document.getElementById("ip").innerHTML = 'Got your IP ! : ' + ip;
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+<!-- {
+"actId":"1800048",
+"userId":"1000110002",
+"role":"TEACHER",
+"originCode":1,
+"ip":"192.168.10.126",
+"time":1501898391985,
+"schoolId":10001,
+"schoolName":"杭州学军小学55",
+"countyId":330108,
+"countyName":"滨江区",
+"userName":"刘德华",
+"userIcon":"http://avatar.xueleyun.com/images/96x96_b29b17ad9b0439e3c000cc2665df60e3.jpg",
+"gradeId":7,
+"classId":"bdb5f380424b11e5825844a8421dc7b3",
+"className":"七年级(1)班",
+"data":{
+    "teachClassId":"bdb5f380424b11e5825844a8421dc7b3",
+    "teachClassType":1,
+    "teachType":2,
+    "coursewareId":"91a378a1942c4adf85b7b128a9016c99",
+    "timerType":1,
+    "teachWay":2,
+    "periodId":"91a378a1942c4adf85b7b128a9016c991501813851412"
+    }
+} -->
